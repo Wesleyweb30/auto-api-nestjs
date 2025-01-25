@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
+import {hashSync as bcryptHashSync} from 'bcrypt'
 
 @Injectable()
 export class UsersService {
@@ -20,12 +21,13 @@ export class UsersService {
   ];
 
   create(createUserDto: CreateUserDto) {
+    createUserDto.password = bcryptHashSync(createUserDto.password, 10);
     this.users.push(createUserDto)
     return createUserDto;
   }
 
-  findAll() {
-    return `This action returns all users`;
+  findAll(): User[] {
+    return this.users;
   }
 
   async findOne(username: string): Promise<User | undefined> {
@@ -36,7 +38,7 @@ export class UsersService {
     return `This action updates a #${id} user`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  remove(id: string) {
+    return 'This action delete a id user'
   }
 }
