@@ -35,6 +35,7 @@ O sistema segue o padrão RESTful para simplificar integração e manutenção.
 ### Autenticação
 - `POST /auth/register` - Cadastro de novos usuários.
 - `POST /auth/login` - Login e geração de token JWT.
+- `POST /auth/profile` - Perfil do usuário precisa do jwt.
 
 ### Clientes
 - `GET /clientes` - Listar todos os clientes.
