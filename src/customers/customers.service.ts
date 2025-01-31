@@ -3,54 +3,69 @@ import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { Customer } from './entities/customer.entity';
 import { randomUUID } from 'crypto';
+import { prisma } from 'src/libs/prisma/prisma';
 
 @Injectable()
 export class CustomersService {
 
   private readonly customers: Customer[] = [];
 
-  create(createCustomerDto: CreateCustomerDto): Customer {
-    const newCustomer: Customer = {
-      id: randomUUID(),
-      ...createCustomerDto,
-    };
-    this.customers.push(newCustomer);
-    return newCustomer;
-  }
-
-  findAll(): Customer[] {
-    return this.customers;
-  }
-
-  findOne(id: string): Customer {
-    const customer = this.customers.find((c) => c.id === id);
-    if (!customer) {
-      throw new NotFoundException(`Customer with ID ${id} not found`);
-    }
-    return customer;
-  }
-
-  update(id: string, updateCustomerDto: UpdateCustomerDto): Customer {
-    const customerIndex = this.customers.findIndex((c) => c.id === id);
-    if (customerIndex === -1) {
-      throw new NotFoundException(`Customer with ID ${id} not found`);
+  async create(createCustomerDto: CreateCustomerDto): Promise<Customer| any> {
+    const foundCustomer = await prisma.customer.findUnique({
+      where : {cpf: createCustomerDto.cpf}
+    })
+    
+    if(foundCustomer) {
+      return { message : "Customer is exist" }
     }
 
-    const updatedCustomer = {
-      ...this.customers[customerIndex],
-      ...updateCustomerDto,
-    };
-    this.customers[customerIndex] = updatedCustomer;
-    return updatedCustomer;
+    return await prisma.customer.create({
+      data: createCustomerDto
+    })
+  }
+
+  async findAll(): Promise<Customer[]> {
+    return await prisma.customer.findMany();
+  }
+
+  async findOne(id: string): Promise<Customer | any>{
+    const foundCustomer = await prisma.customer.findUnique({
+      where: {id: id}
+    })
+
+    if (!foundCustomer) {
+      return { message: "Customer not exist"}
+    }
+    return foundCustomer; 
+  }
+
+  async update(id: string, updateCustomerDto: UpdateCustomerDto): Promise<Customer |  any> {
+    const foundCustomer = await prisma.customer.findUnique({
+      where: {id: id}
+    })
+
+    if (!foundCustomer) {
+      return { message: "Customer not exist to edite"}
+    }
+
+    const updateCustomer = await prisma.customer.update({
+      where: {id: id},
+      data: {...updateCustomerDto}
+    })
+    return updateCustomer;
   }
 
 
-  remove(id: string): void {
-    const customerIndex = this.customers.findIndex((c) => c.id === id);
-    if (customerIndex === -1) {
-      throw new NotFoundException(`Customer with ID ${id} not found`);
+  async remove(id: string): Promise<void | any> {
+    const foundCustomer = await prisma.customer.findUnique({
+      where: {id: id}
+    })
+
+    if (!foundCustomer) {
+      return { message: "Customer not exist to delete"}
     }
-    this.customers.splice(customerIndex, 1);
+
+    await prisma.customer.delete( { where: { id: id } } );
   }
 
 }
