@@ -2,13 +2,10 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { Customer } from './entities/customer.entity';
-import { randomUUID } from 'crypto';
 import { prisma } from 'src/libs/prisma/prisma';
 
 @Injectable()
 export class CustomersService {
-
-  private readonly customers: Customer[] = [];
 
   async create(createCustomerDto: CreateCustomerDto): Promise<Customer| any> {
     const foundCustomer = await prisma.customer.findUnique({

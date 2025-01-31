@@ -5,5 +5,4 @@ export class UpdateServiceDto extends PartialType(CreateServiceDto) {
     name: string;
     description: string;
     price: number;
-    duration: number;
 }

@@ -41,6 +41,17 @@ export class UsersService {
     return foundUser;
   }
 
+  async findById(id: string) : Promise<User | undefined> {
+    const foundUser = await prisma.user.findUnique({
+      where: {id : id}  
+    })
+    if(!foundUser) {
+      return null;
+    }
+
+    return foundUser;
+  }
+
   async update(id: string, updateUserDto: UpdateUserDto) : Promise<User | undefined> {
     const foundUserr = await prisma.user.findUnique({
       where: {id: id}

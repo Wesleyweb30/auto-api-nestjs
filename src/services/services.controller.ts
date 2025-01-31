@@ -11,17 +11,17 @@ export class ServicesController {
   constructor(private readonly servicesService: ServicesService) { }
 
   @Post()
-  create(@Body() createServiceDto: CreateServiceDto): Service {
+  create(@Body() createServiceDto: CreateServiceDto): Promise<Service> {
     return this.servicesService.create(createServiceDto);
   }
 
   @Get()
-  findAll(): Service[] {
+  findAll(): Promise<Service[]> {
     return this.servicesService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Service {
+  findOne(@Param('id') id: string): Promise<Service> {
     return this.servicesService.findOne(id);
   }
 
@@ -29,12 +29,12 @@ export class ServicesController {
   update(
     @Param('id') id: string,
     @Body() updateServiceDto: UpdateServiceDto,
-  ): Service {
+  ): Promise<Service> {
     return this.servicesService.update(id, updateServiceDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string): void {
+  remove(@Param('id') id: string): Promise<void> {
     return this.servicesService.remove(id);
   }
 }
