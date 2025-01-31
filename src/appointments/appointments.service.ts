@@ -5,7 +5,7 @@ import { randomUUID } from 'crypto';
 import { Appointment } from './entities/appointment.entity';
 
 @Injectable()
-export class AppointmentService {
+export class AppointmentsService {
   private list: Appointment[] = [];
 
   create(createAppointmentDto: CreateAppointmentDto) {

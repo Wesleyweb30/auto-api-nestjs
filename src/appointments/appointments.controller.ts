@@ -1,13 +1,13 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
-import { AppointmentService } from './appointment.service';
+import { AppointmentsService } from './appointments.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 
 @UseGuards(AuthGuard)
 @Controller('appointments')
-export class AppointmentController {
-  constructor(private readonly appointmentService: AppointmentService) {}
+export class AppointmentsController {
+  constructor(private readonly appointmentService: AppointmentsService) {}
 
   @Post()
   create(@Body() createAppointmentDto: CreateAppointmentDto) {
